@@ -19,14 +19,6 @@ class ProductPage(BasePage):
         except NoSuchElementException:
             print("Not found button 'Add to basket'")
 
-    def should_be_added_by_button(self):
-        try:
-            # ищем кнопку и добавляем в корзину
-            self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET).click()
-            self.solve_quiz_and_get_code()
-        except NoSuchElementException:
-            print("Not found button 'Add to basket'")
-
     def should_be_same_product_name(self, product_name_offered):
         # получаем название товара в корзине
         name_in_basket = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_IN_BASKET).text
@@ -37,10 +29,10 @@ class ProductPage(BasePage):
         price_in_basket = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_IN_BASKET).text
         assert product_price_offered == price_in_basket, "Offered price and price in basket is not equal"
 
-    def should_not_be_success_message(self):
-        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
-            "Success message is presented, but should not be"
-
     def should_be_success_message_disappeared(self):
         assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
             "Success message is  not disappeared, but should be"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
