@@ -1,32 +1,39 @@
+from selenium.common.exceptions import NoSuchElementException
 from .base_page import BasePage
 from .locators import ProductPageLocators
 
 
 class ProductPage(BasePage):
 
+    def _get_product_name_from_description(self):
+        return self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_OFFERED).text
+
+    def _get_product_price_from_description(self):
+        return self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_OFFERED).text
+
     def should_be_added_to_basket(self):
         self.should_be_added_by_button()
-        self.should_be_same_product_name()
-        self.should_be_same_product_price()
+
+        product_name_offered = self._get_product_name_from_description()
+        self.should_be_same_product_name(product_name_offered)
+
+        product_price_offered = self._get_product_price_from_description()
+        self.should_be_same_product_price(product_price_offered)
 
     def should_be_added_by_button(self):
-        # ищем кнопку
-        button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET)
-        # добавляем в корзину
-        button.click()
-        self.solve_quiz_and_get_code()
-        assert button is not None, "Not found button 'Add to basket'"
+        try:
+            # ищем кнопку и добавляем в корзину
+            button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET).click()
+            self.solve_quiz_and_get_code()
+        except NoSuchElementException:
+            print("Not found button 'Add to basket'")
 
-    def should_be_same_product_name(self):
-        # получаем название продукта в описании товара
-        name_offered = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_OFFERED).text
+    def should_be_same_product_name(self, product_name_offered):
         # получаем название товара в корзине
         name_in_basket = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_IN_BASKET).text
-        assert name_offered == name_in_basket, "Offered name and name in basket is not equal"
+        assert product_name_offered == name_in_basket, "Offered name and name in basket is not equal"
 
-    def should_be_same_product_price(self):
-        # получаем предлагаемую цену товара
-        price_offered = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_OFFERED).text
+    def should_be_same_product_price(self, product_price_offered):
         # получаем цену в корзине
         price_in_basket = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_IN_BASKET).text
-        assert price_offered == price_in_basket, "Offered price and price in basket is not equal"
+        assert product_price_offered == price_in_basket, "Offered price and price in basket is not equal"
