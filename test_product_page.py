@@ -1,4 +1,6 @@
 import pytest
+import time
+from .pages.login_page import LoginPage
 from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
 
@@ -6,6 +8,38 @@ from .pages.basket_page import BasketPage
 #     "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear",
 #     "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
 # ]
+
+
+@pytest.mark.login
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+        login_page = LoginPage(browser, link)
+        login_page.open()
+        login_page.go_to_login_page()
+
+        email = str(time.time()) + "@fakemail.org"
+        password = str(time.time())
+        login_page.register_new_user(email, password)
+        login_page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+        # инициализируем Page Object, передаем в конструктор экземпляр драйвера и url адрес
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_be_added_to_basket()
+        product_name_offered = page.get_product_name_from_description()
+        page.should_be_same_product_name(product_name_offered)
+        product_price_offered = page.get_product_price_from_description()
+        page.should_be_same_product_price(product_price_offered)
 
 @pytest.mark.parametrize('link',
     [
