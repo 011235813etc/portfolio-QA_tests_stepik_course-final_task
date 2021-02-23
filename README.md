@@ -1,61 +1,31 @@
 # portfolio_QA_stepik_course
 
-Example:
+Task:
 
 
-Плюсы наследования: пример
+Задание: наследование и отрицательные проверки
 
-В предыдущем уроке, мы написали тест "гость может перейти на страницу логина с главной страницы магазина". 
-Но если вы внимательно посмотрите на остальные страницы, то заметите, что ссылка на страницу логина 
-присутствует на каждой странице. Если мы хотим добавить тест "гость может перейти на страницу логина со 
-страницы товара", то для избежания дублирования, логично перенести соответствующие методы в класс BasePage. 
-Давайте так и поступим: 
+В файл test_main_page.py добавьте тест с названием
 
-В файле locators.py создаем новый класс BasePageLocators и переносим туда соответствующие элементы:
+ test_guest_cant_see_product_in_basket_opened_from_main_page:
 
-      class BasePageLocators():
-          LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
-          LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+   1. Гость открывает главную страницу 
+   2. Переходит в корзину по кнопке в шапке сайта
+   3. Ожидаем, что в корзине нет товаров
+   4. Ожидаем, что есть текст о том что корзина пуста 
 
-В файл base_page.py переносим соответствующие методы, заменяя класс с локаторами на BasePageLocators:  
+В файле test_product_page.py добавьте тест с названием
 
-      from .locators import BasePageLocators
+test_guest_cant_see_product_in_basket_opened_from_product_page:
 
+   1. Гость открывает страницу товара
+   2. Переходит в корзину по кнопке в шапке 
+   3. Ожидаем, что в корзине нет товаров
+   4. Ожидаем, что есть текст о том что корзина пуста 
 
-      class BasePage():
-      ...
-          def go_to_login_page(self):
-              link = self.browser.find_element(*BasePageLocators.LOGIN_LINK_INVALID)
-              link.click()
-      
-          def should_be_login_link(self):
-              assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
-      ... 
+В классе BasePage реализуйте соответствующий метод для перехода в корзину. Создайте файл basket_page.py и 
+в нем класс BasketPage. Реализуйте там необходимые проверки, в том числе отрицательную, 
+которую мы обсуждали в предыдущих шагах. 
 
-Примечание: методы лучше всего описывать в классе в алфавитном порядке, так проще ориентироваться и находить.
+Убедитесь, что тесты проходят и зафиксируйте изменения в коммите. 
 
-В классе MainPage у нас не осталось никаких методов, поэтому добавим туда заглушку: 
-
-      class MainPage(BasePage):
-          def __init__(self, *args, **kwargs):
-              super(MainPage, self).__init__(*args, **kwargs)
-
-Как вы уже знаете, метод __init__ вызывается при создании объекта. Конструктор выше с ключевым словом super на самом деле только вызывает конструктор класса предка и передает ему все те аргументы, которые мы передали в конструктор MainPage. 
-
-Теперь мы можем легко добавлять тесты вида "гость может перейти на страницу логина со страницы Х". 
-
-Добавляем в файл c тестами test_product_page.py новые тесты: 
-
-      def test_guest_should_see_login_link_on_product_page(browser):
-          link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
-          page = ProductPage(browser, link)
-          page.open()
-          page.should_be_login_link()
-
-Добавьте самостоятельно второй тест 
-
-test_guest_can_go_to_login_page_from_product_page 
-
-Запустите тесты и убедитесь, что они проходят. 
-
-Зафиксируйте изменения коммитом. 
