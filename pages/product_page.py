@@ -5,19 +5,19 @@ from .locators import ProductPageLocators
 
 class ProductPage(BasePage):
 
-    def _get_product_name_from_description(self):
+    def get_product_name_from_description(self):
         return self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_OFFERED).text
 
-    def _get_product_price_from_description(self):
+    def get_product_price_from_description(self):
         return self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_OFFERED).text
 
     def should_be_added_to_basket(self):
-        self.should_not_be_success_message()
-        self.should_be_added_by_button()
-        product_name_offered = self._get_product_name_from_description()
-        self.should_be_same_product_name(product_name_offered)
-        product_price_offered = self._get_product_price_from_description()
-        self.should_be_same_product_price(product_price_offered)
+        try:
+            # ищем кнопку и добавляем в корзину
+            self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET).click()
+            self.solve_quiz_and_get_code()
+        except NoSuchElementException:
+            print("Not found button 'Add to basket'")
 
     def should_be_added_by_button(self):
         try:
@@ -40,3 +40,7 @@ class ProductPage(BasePage):
     def should_not_be_success_message(self):
         assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
             "Success message is presented, but should not be"
+
+    def should_be_success_message_disappeared(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is  not disappeared, but should be"
