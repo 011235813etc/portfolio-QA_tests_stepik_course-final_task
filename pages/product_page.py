@@ -17,7 +17,7 @@ class ProductPage(BasePage):
             self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET).click()
             self.solve_quiz_and_get_code()
         except NoSuchElementException:
-            print("Not found button 'Add to basket'")
+            assert False, "Not found button 'Add to basket'"
 
     def should_be_same_product_name(self, product_name_offered):
         # получаем название товара в корзине
