@@ -1,5 +1,10 @@
 import pytest
 
+
+class MainPageLinks():
+    main_page = ["http://selenium1py.pythonanywhere.com/"]
+
+
 class ProductPageLinks():
     add_product_in_basket = [
         pytest.param(
@@ -31,7 +36,3 @@ class ProductPageLinks():
         "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
         "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"
     ]
-
-
-class MainPageLinks():
-    main_page = ["http://selenium1py.pythonanywhere.com/"]
