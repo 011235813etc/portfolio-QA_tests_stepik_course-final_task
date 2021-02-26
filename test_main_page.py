@@ -1,8 +1,8 @@
 import pytest
-from .pages.main_page import MainPage
-from .pages.login_page import LoginPage
-from .pages.basket_page import BasketPage
-from .pages.links import MainPageLinks
+from pages.main_page import MainPage
+from pages.login_page import LoginPage
+from pages.basket_page import BasketPage
+from pages.links import MainPageLinks
 
 
 @pytest.mark.parametrize('link', MainPageLinks.main_page)

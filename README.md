@@ -21,7 +21,7 @@ Command to run tests:
         pytest -v --tb=line --language=en -m need_review test_product_page.py
 or
 
-        pytest -v --tb=line --language=en -m need_review test_main_page.py
+        pytest -v --tb=line --language=en test_main_page.py
 
 
 Небольшая инструкция по запуску:
