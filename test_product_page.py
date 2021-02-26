@@ -1,9 +1,9 @@
 import pytest
 import time
-from .pages.login_page import LoginPage
-from .pages.product_page import ProductPage
-from .pages.basket_page import BasketPage
-from .pages.links import ProductPageLinks
+from pages.login_page import LoginPage
+from pages.product_page import ProductPage
+from pages.basket_page import BasketPage
+from pages.links import ProductPageLinks
 
 
 @pytest.mark.parametrize('link', ProductPageLinks.add_product_in_basket)
